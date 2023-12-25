@@ -2,7 +2,8 @@ package com.example.qualco.service;
 
 import java.util.List;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import com.example.qualco.model.ResultRatioModel;
 @Service
 public class CustomQueryService {
     private final JdbcTemplate jdbcTemplate;
+    
+    private static final Logger log = LoggerFactory.getLogger(CustomQueryService.class);
 
     @Autowired
     public CustomQueryService(JdbcTemplate jdbcTemplate) {
@@ -19,6 +22,8 @@ public class CustomQueryService {
     }
 
     public List<ResultRatioModel> executeCustomQuery() {
+        log.info("Executing custom query for GDP/Population ratio.");
+
         String customQuery = "SELECT c.name, c.country_code3, cs.year, cs.population, cs.gdp " +
                 "FROM countries c " +
                 "JOIN (SELECT country_id, year, population, gdp, " +
@@ -39,6 +44,8 @@ public class CustomQueryService {
     }
     
     public List<CountryStatModel> executeCustomQueryForCountryStats() {
+        log.info("Executing custom query for country statistics.");
+
         String customQuery = "SELECT c.name AS country_name, r.name AS region_name, cn.name AS continent_name, cs.year, cs.population, cs.gdp " +
                 "FROM country_stats cs " +
                 "JOIN countries c ON cs.country_id = c.country_id " +
